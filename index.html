@@ -301,6 +301,224 @@
     </style>
 </head>
 <body>
+    <script>
+        // Global variables
+        let currentSection = 'basics';
+        let completedSections = new Set(['basics']);
+        
+        // Show specific section
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                currentSection = sectionId;
+                completedSections.add(sectionId);
+                updateProgress();
+            }
+            
+            // Update navigation pills
+            const navPills = document.querySelectorAll('.nav-pill');
+            navPills.forEach(pill => {
+                pill.classList.remove('active');
+            });
+            
+            // Add active class to clicked pill
+            event.target.classList.add('active');
+        }
+        
+        // Update progress bar
+        function updateProgress() {
+            const totalSections = 7; // Total number of sections
+            const completedCount = completedSections.size;
+            const progressPercentage = (completedCount / totalSections) * 100;
+            
+            const progressBar = document.getElementById('progressBar');
+            if (progressBar) {
+                progressBar.style.width = progressPercentage + '%';
+            }
+        }
+        
+        // Search functionality
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    const searchTerm = e.target.value.toLowerCase();
+                    searchContent(searchTerm);
+                });
+            }
+        }
+        
+        // Search through content
+        function searchContent(term) {
+            if (term.length < 2) {
+                // Show all sections if search is too short
+                showAllSections();
+                return;
+            }
+            
+            const sections = document.querySelectorAll('.content-section');
+            let foundMatch = false;
+            
+            sections.forEach(section => {
+                const content = section.textContent.toLowerCase();
+                const sectionId = section.id;
+                
+                if (content.includes(term)) {
+                    section.classList.add('active');
+                    foundMatch = true;
+                    
+                    // Highlight the matching section in navigation
+                    const navPill = document.querySelector(`[onclick="showSection('${sectionId}')"]`);
+                    if (navPill) {
+                        navPill.style.background = 'rgba(255, 255, 0, 0.3)';
+                    }
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+            
+            if (!foundMatch) {
+                // Show a "no results" message
+                showNoResults(term);
+            }
+        }
+        
+        // Show all sections (reset search)
+        function showAllSections() {
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show the current section
+            document.getElementById(currentSection).classList.add('active');
+            
+            // Reset navigation highlighting
+            const navPills = document.querySelectorAll('.nav-pill');
+            navPills.forEach(pill => {
+                pill.style.background = '';
+            });
+        }
+        
+        // Show no results message
+        function showNoResults(term) {
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Create or show no results message
+            let noResultsDiv = document.getElementById('noResults');
+            if (!noResultsDiv) {
+                noResultsDiv = document.createElement('div');
+                noResultsDiv.id = 'noResults';
+                noResultsDiv.className = 'content-section card';
+                noResultsDiv.innerHTML = `
+                    <h2>🔍 No Results Found</h2>
+                    <p>Sorry, we couldn't find any content matching "<strong>${term}</strong>".</p>
+                    <p>Try searching for:</p>
+                    <ul>
+                        <li>Schema</li>
+                        <li>Data ingestion</li>
+                        <li>Segments</li>
+                        <li>Destinations</li>
+                        <li>Real-time</li>
+                    </ul>
+                    <button onclick="clearSearch()" style="background: #3498db; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-top: 15px;">Clear Search</button>
+                `;
+                document.querySelector('.container').appendChild(noResultsDiv);
+            } else {
+                noResultsDiv.querySelector('strong').textContent = term;
+            }
+            
+            noResultsDiv.classList.add('active');
+        }
+        
+        // Clear search
+        function clearSearch() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.value = '';
+            }
+            
+            const noResultsDiv = document.getElementById('noResults');
+            if (noResultsDiv) {
+                noResultsDiv.classList.remove('active');
+            }
+            
+            showAllSections();
+        }
+        
+        // Quiz functionality
+        function checkAnswer(element, isCorrect) {
+            // Remove previous states
+            const options = element.parentElement.querySelectorAll('li');
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+            });
+            
+            // Add appropriate class
+            if (isCorrect) {
+                element.classList.add('correct');
+                element.innerHTML += ' ✅ Correct!';
+            } else {
+                element.classList.add('incorrect');
+                element.innerHTML += ' ❌ Try again!';
+                
+                // Show correct answer after 2 seconds
+                setTimeout(() => {
+                    options.forEach(option => {
+                        if (option.onclick && option.onclick.toString().includes('true')) {
+                            option.classList.add('correct');
+                            option.innerHTML += ' ✅ This is correct!';
+                        }
+                    });
+                }, 2000);
+            }
+            
+            // Disable further clicking
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+        }
+        
+        // Smooth scrolling for navigation
+        function smoothScrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setupSearch();
+            updateProgress();
+            
+            // Add smooth scrolling to nav pills
+            const navPills = document.querySelectorAll('.nav-pill');
+            navPills.forEach(pill => {
+                pill.addEventListener('click', smoothScrollToTop);
+            });
+            
+            // Add keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    clearSearch();
+                }
+            });
+            
+            console.log('Adobe AEP Learning Hub loaded successfully! 🚀');
+        });
+    </script>
     <div class="container">
         <header>
             <h1>🚀 Adobe AEP Learning Hub</h1>
