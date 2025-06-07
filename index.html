@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adobe AEP Learning Hub - Simplified for Beginners</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            width: 0%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .nav-pills {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .nav-pill {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .nav-pill:hover, .nav-pill.active {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+
+        .card h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .card h3 {
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3);
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            border-left: 4px solid #4299e1;
+        }
+
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            background: #f8f9fa;
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            position: relative;
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: -15px;
+            top: 15px;
+            background: #28a745;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-item {
+            background: #f1f3f4;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: scale(1.05);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .quiz-container {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .quiz-question {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #856404;
+        }
+
+        .quiz-options {
+            list-style: none;
+            padding: 0;
+        }
+
+        .quiz-options li {
+            background: white;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .quiz-options li:hover {
+            background: #e2e6ea;
+        }
+
+        .quiz-options li.correct {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+
+        .quiz-options li.incorrect {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            color: rgba(255,255,255,0.8);
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .nav-pills { flex-direction: column; align-items: center; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Adobe AEP Learning Hub</h1>
+            <p class="subtitle">Master Adobe Experience Platform from Zero to Hero</p>
+            
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search topics..." id="searchInput">
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+        </header>
+
+        <nav class="nav-pills">
+            <button class="nav-pill active" onclick="showSection('basics')">🎯 Basics</button>
+            <button class="nav-pill" onclick="showSection('schema')">📋 Schema</button>
+            <button class="nav-pill" onclick="showSection('ingestion')">📥 Data Ingestion</button>
+            <button class="nav-pill" onclick="showSection('segments')">👥 Segments</button>
+            <button class="nav-pill" onclick="showSection('destinations')">🎯 Destinations</button>
+            <button class="nav-pill" onclick="showSection('rtcdp')">⚡ Real-time CDP</button>
+            <button class="nav-pill" onclick="showSection('practice')">🧪 Practice</button>
+        </nav>
+
+        <!-- Basics Section -->
+        <div id="basics" class="content-section active">
+            <div class="card">
+                <h2>🎯 What is Adobe Experience Platform (AEP)?</h2>
+                
+                <div class="highlight-box">
+                    <h3>Think of AEP as a Smart Data Hub 🧠</h3>
+                    <p>Imagine you have customer data scattered everywhere - your website, mobile app, email campaigns, store visits. AEP is like a super-smart organizer that collects all this data, understands it, and helps you create amazing customer experiences.</p>
+                </div>
+
+                <h3>Key Components:</h3>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">🗄️</div>
+                        <h4>Data Lake</h4>
+                        <p>Stores all your raw data securely</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🧩</div>
+                        <h4>XDM Schema</h4>
+                        <p>Organizes data in a standard format</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">👤</div>
+                        <h4>Real-time Profile</h4>
+                        <p>Creates unified customer profiles</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🎯</div>
+                        <h4>Segmentation</h4>
+                        <p>Groups customers for targeting</p>
+                    </div>
+                </div>
+
+                <h3>Why Use AEP?</h3>
+                <ul class="step-list">
+                    <li><strong>Unified View:</strong> See all customer interactions in one place</li>
+                    <li><strong>Real-time:</strong> Get instant insights as data comes in</li>
+                    <li><strong>Scalable:</strong> Handles massive amounts of data</li>
+                    <li><strong>Privacy-First:</strong> Built with data governance in mind</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Schema Section -->
+        <div id="schema" class="content-section">
+            <div class="card">
+                <h2>📋 Understanding XDM Schema</h2>
+                
+                <div class="highlight-box">
+                    <h3>What is XDM Schema? 🤔</h3>
+                    <p><strong>XDM = Experience Data Model</strong><br>
+                    Think of it as a blueprint or template that tells AEP exactly what your data looks like and means. It's like having a universal translator for all your data!</p>
+                </div>
+
+                <h3>Schema Components:</h3>
+                
+                <h4>1. Field Groups (Mixins)</h4>
+                <p>Pre-built sets of fields for common data types:</p>
+                <div class="code-block">
+• Profile Demographics (name, age, gender)
+• Contact Details (email, phone, address)  
+• Commerce Details (purchases, cart data)
+• Web Analytics (page views, clicks)
+                </div>
+
+                <h4>2. Data Types</h4>
+                <p>Different kinds of information you can store:</p>
+                <ul class="step-list">
+                    <li><strong>String:</strong> Text data like names, addresses</li>
+                    <li><strong>Number:</strong> Quantities, prices, ages</li>
+                    <li><strong>Boolean:</strong> True/false values (subscribed/not subscribed)</li>
+                    <li><strong>Date:</strong> Timestamps, birthdates</li>
+                    <li><strong>Object:</strong> Complex data with multiple properties</li>
+                </ul>
+
+                <h3>Creating Your First Schema - Step by Step:</h3>
+                <ol class="step-list">
+                    <li>Go to AEP → Schemas → Create Schema</li>
+                    <li>Choose "XDM Individual Profile" or "XDM ExperienceEvent"</li>
+                    <li>Add Field Groups that match your data needs</li>
+                    <li>Add custom fields if needed</li>
+                    <li>Set Identity fields (email, customer ID)</li>
+                    <li>Enable for Profile if you want unified customer views</li>
+                    <li>Save and activate your schema</li>
+                </ol>
+
+                <div class="quiz-container">
+                    <div class="quiz-question">Quick Check: What does XDM stand for?</div>
+                    <ul class="quiz-options">
+                        <li onclick="checkAnswer(this, false)">eXternal Data Management</li>
+                        <li onclick="checkAnswer(this, true)">eXperience Data Model</li>
+                        <li onclick="checkAnswer(this, false)">eXtended Data Mapping</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Ingestion Section -->
+        <div id="ingestion" class="content-section">
+            <div class="card">
+                <h2>📥 Data Ingestion Made Simple</h2>
+                
+                <div class="highlight-box">
+                    <h3>What is Data Ingestion? 🚚</h3>
+                    <p>Data ingestion is like moving furniture into your new house (AEP). You need to get your data from where it currently lives into Adobe Experience Platform so you can use it.</p>
+                </div>
+
+                <h3>Two Main Types:</h3>
+                
+                <h4>1. Batch Ingestion 📦</h4>
+                <p>Upload data files all at once - like moving boxes</p>
+                <ul class="step-list">
+                    <li><strong>Best for:</strong> Historical data, daily reports, large CSV files</li>
+                    <li><strong>Formats:</strong> CSV, JSON, Parquet</li>
+                    <li><strong>How:</strong> Upload files through UI or API</li>
+                    <li><strong>Speed:</strong> Processes every few hours or daily</li>
+                </ul>
+
+                <h4>2. Streaming Ingestion ⚡</h4>
+                <p>Data flows in real-time - like a water stream</p>
+                <ul class="step-list">
+                    <li><strong>Best for:</strong> Website clicks, app events, live transactions</li>
+                    <li><strong>Method:</strong> API calls, SDK integration</li>
+                    <li><strong>Speed:</strong> Data available within seconds</li>
+                    <li><strong>Use case:</strong> Real-time personalization</li>
+                </ul>
+
+                <h3>Step-by-Step: Your First Batch Upload</h3>
+                <ol class="step-list">
+                    <li>Prepare your CSV file with proper headers</li>
+                    <li>Go to AEP → Sources → Add Data</li>
+                    <li>Choose "Upload File" as your source</li>
+                    <li>Map your CSV columns to schema fields</li>
+                    <li>Preview and validate the mapping</li>
+                    <li>Configure the dataset name and description</li>
+                    <li>Start the ingestion process</li>
+                    <li>Monitor progress in the monitoring dashboard</li>
+                </ol>
+
+                <div class="code-block">
+Example CSV Structure:
+email,firstName,lastName,age,city
+john@email.com,John,Doe,25,New York
+jane@email.com,Jane,Smith,30,Los Angeles
+                </div>
+
+                <h3>Common Ingestion Challenges & Solutions:</h3>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">❌</div>
+                        <h4>Data Format Issues</h4>
+                        <p><strong>Solution:</strong> Use schema validation before upload</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🔄</div>
+                        <h4>Mapping Errors</h4>
+                        <p><strong>Solution:</strong> Preview mappings and test with sample data</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">⏱️</div>
+                        <h4>Large File Timeouts</h4>
+                        <p><strong>Solution:</strong> Split large files into smaller chunks</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Segments Section -->
+        <div id="segments" class="content-section">
+            <div class="card">
+                <h2>👥 Customer Segmentation</h2>
+                
+                <div class="highlight-box">
+                    <h3>What are Segments? 🎯</h3>
+                    <p>Segments are groups of customers who share similar characteristics or behaviors. Think of it like organizing your friends into groups - sports fans, foodies, travelers - so you can send them relevant invitations!</p>
+                </div>
+
+                <h3>Types of Segments:</h3>
+                
+                <h4>1. Batch Segments 📊</h4>
+                <ul class="step-list">
+                    <li><strong>When:</strong> Evaluated daily or on schedule</li>
+                    <li><strong>Best for:</strong> Complex analysis, historical data patterns</li>
+                    <li><strong>Example:</strong> "Customers who bought 3+ items last month"</li>
+                </ul>
+
+                <h4>2. Streaming Segments ⚡</h4>
+                <ul class="step-list">
+                    <li><strong>When:</strong> Updated in real-time as data arrives</li>
+                    <li><strong>Best for:</strong> Immediate actions, live personalization</li>
+                    <li><strong>Example:</strong> "Visitors currently on checkout page"</li>
+                </ul>
+
+                <h3>Building Your First Segment:</h3>
+                <ol class="step-list">
+                    <li>Go to AEP → Segments → Create Segment</li>
+                    <li>Choose your evaluation method (Batch/Streaming)</li>
+                    <li>Define your audience using the segment builder</li>
+                    <li>Add attributes (age, location, purchase history)</li>
+                    <li>Set up events (page views, purchases, clicks)</li>
+                    <li>Preview estimated audience size</li>
+                    <li>Save and activate your segment</li>
+                </ol>
+
+                <h3>Popular Segment Examples:</h3>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">🛍️</div>
+                        <h4>High-Value Customers</h4>
+                        <p>Customers with total purchases > $1000</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🔄</div>
+                        <h4>Cart Abandoners</h4>
+                        <p>Added items but didn't complete purchase</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🆕</div>
+                        <h4>New Subscribers</h4>
+                        <p>Signed up in the last 7 days</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📱</div>
+                        <h4>Mobile Users</h4>
+                        <p>Primarily access via mobile devices</p>
+                    </div>
+                </div>
+
+                <div class="code-block">
+Example Segment Logic:
+Profile Attributes:
+- Age between 25-45
+- Location: California
+- Loyalty Status: Gold
+
+Events:
+- Viewed product page in last 7 days
+- Has not made purchase in last 30 days
+                </div>
+            </div>
+        </div>
+
+        <!-- Destinations Section -->
+        <div id="destinations" class="content-section">
+            <div class="card">
+                <h2>🎯 Destinations - Where Your Data Goes to Work</h2>
+                
+                <div class="highlight-box">
+                    <h3>What are Destinations? 🚀</h3>
+                    <p>Destinations are where you send your segments and data to take action. Think of them as the delivery trucks that take your organized customer groups to marketing platforms, ad networks, or other systems where you'll engage with customers.</p>
+                </div>
+
+                <h3>Types of Destinations:</h3>
+                
+                <h4>1. Advertising Destinations 📢</h4>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">📘</div>
+                        <h4>Facebook/Meta</h4>
+                        <p>Custom audiences for social ads</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🔍</div>
+                        <h4>Google Ads</h4>
+                        <p>Search and display advertising</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">💼</div>
+                        <h4>LinkedIn</h4>
+                        <p>Professional network targeting</p>
+                    </div>
+                </div>
+
+                <h4>2. Email Marketing 📧</h4>
+                <ul class="step-list">
+                    <li><strong>Adobe Campaign:</strong> Native integration for email campaigns</li>
+                    <li><strong>Salesforce Marketing Cloud:</strong> Enterprise email automation</li>
+                    <li><strong>Mailchimp:</strong> Small business email marketing</li>
+                </ul>
+
+                <h4>3. Personalization 🎨</h4>
+                <ul class="step-list">
+                    <li><strong>Adobe Target:</strong> Website personalization and A/B testing</li>
+                    <li><strong>Optimizely:</strong> Experience optimization platform</li>
+                    <li><strong>Dynamic Yield:</strong> AI-powered personalization</li>
+                </ul>
+
+                <h3>Setting Up Your First Destination:</h3>
+                <ol class="step-list">
+                    <li>Go to AEP → Destinations → Browse Catalog</li>
+                    <li>Find your desired platform (e.g., Facebook)</li>
+                    <li>Click "Configure" to set up connection</li>
+                    <li>Authenticate with your platform account</li>
+                    <li>Name your destination connection</li>
+                    <li>Map AEP segments to platform audiences</li>
+                    <li>Set up data export schedule</li>
+                    <li>Activate and monitor the data flow</li>
+                </ol>
+
+                <h3>Destination Mapping Example:</h3>
+                <div class="code-block">
+AEP Segment → Facebook Custom Audience
+
+Segment: "High-Value Customers"
+↓
+Facebook: "Premium Customer Lookalike"
+↓ 
+Campaign: "Luxury Product Ads"
+                </div>
+
+                <div class="quiz-container">
+                    <div class="quiz-question">Which destination type would you use for website personalization?</div>
+                    <ul class="quiz-options">
+                        <li onclick="checkAnswer(this, false)">Email Marketing</li>
+                        <li onclick="checkAnswer(this, true)">Personalization (Adobe Target)</li>
+                        <li onclick="checkAnswer(this, false)">Advertising</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-time CDP Section -->
+        <div id="rtcdp" class="content-section">
+            <div class="card">
+                <h2>⚡ Real-time Customer Data Platform (RT-CDP)</h2>
+                
+                <div class="highlight-box">
+                    <h3>What is RT-CDP? 🔄</h3>
+                    <p>RT-CDP is like having a super-fast, always-updated customer database that knows what each customer is doing RIGHT NOW. It's the premium version of AEP that focuses on immediate, personalized customer experiences.</p>
+                </div>
+
+                <h3>Key RT-CDP Features:</h3>
+                
+                <h4>1. Real-time Profile Updates ⚡</h4>
+                <ul class="step-list">
+                    <li><strong>Speed:</strong> Customer data updates within seconds</li>
+                    <li><strong>Triggers:</strong> Immediate actions based on behavior</li>
+                    <li><strong>Example:</strong> Customer views expensive product → Instantly added to "High-Intent" segment</li>
+                </ul>
+
+                <h4>2. Identity Resolution 🧩</h4>
+                <p>Connects all customer touchpoints:</p>
+                <div class="code-block">
+Same Customer Across Channels:
+- Website: anonymous_user_123
+- Email: john@email.com  
+- Mobile App: customer_id_456
+- Store: loyalty_card_789
+
+RT-CDP connects these as ONE person!
+                </div>
+
+                <h4>3. Next Best Action 🎯</h4>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">🛒</div>
+                        <h4>Abandoned Cart</h4>
+                        <p>Instant email reminder with discount</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🎁</div>
+                        <h4>Birthday Month</h4>
+                        <p>Automatic personalized offer</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📱</div>
+                        <h4>App Download</h4>
+                        <p>Welcome series with tips</p>
+                    </div>
+                </div>
+
+                <h3>RT-CDP vs Standard AEP:</h3>
+                <div class="code-block">
+Standard AEP:
+✓ Batch processing (hours/days)
+✓ Basic segmentation  
+✓ Standard destinations
+
+RT-CDP:
+✓ Real-time processing (seconds)
+✓ Advanced AI segmentation
+✓ Premium destinations & integrations
+✓ Advanced identity resolution
+✓ Predictive audiences
+                </div>
+
+                <h3>Use Cases That Need RT-CDP:</h3>
+                <ol class="step-list">
+                    <li><strong>E-commerce:</strong> Real-time product recommendations during browsing</li>
+                    <li><strong>Banking:</strong> Instant fraud detection and prevention</li>
+                    <li><strong>Travel:</strong> Dynamic pricing based on browsing behavior</li>
+                    <li><strong>Media:</strong> Content personalization as user navigates</li>
+                    <li><strong>Retail:</strong> In-store mobile app experiences based on location</li>
+                </ol>
+
+                <h3>Getting Started with RT-CDP:</h3>
+                <ul class="step-list">
+                    <li><strong>Assessment:</strong> Evaluate if you need real-time capabilities</li>
+                    <li><strong>Data Strategy:</strong> Ensure streaming data sources are ready</li>
+                    <li><strong>Identity Map:</strong> Plan how to connect customer touchpoints</li>
+                    <li><strong>Use Cases:</strong> Start with 1-2 high-impact real-time scenarios</li>
+                    <li><strong>Measurement:</strong> Define success metrics for real-time actions</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Practice Section -->
+        <div id="practice" class="content-section">
+            <div class="card">
+                <h2>🧪 Practice Scenarios</h2>
+                
+                <div class="highlight-box">
+                    <h3>Hands-on Learning! 💪</h3>
+                    <p>Let's practice with real-world scenarios. Each exercise builds on what you've learned.</p>
+                </div>
+
+                <h3>Scenario 1: E-commerce Setup 🛍️</h3>
+                <div class="quiz-container">
+                    <p><strong>Challenge:</strong> You run an online clothing store. You want to track customers from website visits to purchases and send personalized emails.</p>
+                    
+                    <p><strong>Your Task:</strong> Design the AEP setup</p>
+                    
+                    <div class="step-list">
+                        <li><strong>Schema Design:</strong> What field groups would you need?</li>
+                        <li><strong>Data Sources:</strong> What data will you ingest?</li>
